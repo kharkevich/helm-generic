@@ -1,0 +1,45 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+      
+      - name: Validate Ingress
+        working-directory: ./application-ingress
+        run: |
+          helm dependency update
+          helm template .
+
+      - name: Validate Demo Service
+        working-directory: ./demo-springboot-service
+        run: |
+          helm dependency update
+          helm template .
+
+      # - name: Run chart-releaser
+      #   uses: helm/chart-releaser-action@v1.2.1
+      #   env:
+      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
