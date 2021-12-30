@@ -28,14 +28,13 @@ jobs:
           version: v3.7.2
 
       - name: Validate Ingress
-        working-directory: ./application-ingress
+        working-directory: ./charts/application-ingress
         run: |
-          ls -la
           helm dependency update
           helm template .
 
       - name: Validate Demo Service
-        working-directory: ./demo-springboot-service
+        working-directory: ./charts/demo-springboot-service
         run: |
           helm dependency update
           helm template .
