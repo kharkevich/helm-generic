@@ -25,11 +25,12 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
-          version: v3.4.0
+          version: v3.7.2
 
       - name: Validate Ingress
         working-directory: ./application-ingress
         run: |
+          ls -la
           helm dependency update
           helm template .
 
