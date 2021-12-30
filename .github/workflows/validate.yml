@@ -26,7 +26,7 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           version: v3.4.0
-      
+
       - name: Validate Ingress
         working-directory: ./application-ingress
         run: |
