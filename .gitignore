@@ -1,0 +1,6 @@
+.*
+!.helmignore
+!.gitignore
+Chart.lock
+charts/**/charts/**
+.DS_Store

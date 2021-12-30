@@ -1,0 +1,38 @@
+{{- /*
+common.hook defines a hook.
+
+This is to be used in a 'metadata.annotations' section.
+
+This should be called as 'template "common.metadata.hook" "post-install"'
+
+Any valid hook may be passed in. Separate multiple hooks with a ",".
+*/ -}}
+{{- define "common.hook" -}}
+"helm.sh/hook": {{printf "%s" . | quote}}
+{{- end -}}
+
+{{- define "common.annote" -}}
+{{- range $k, $v := . }}
+{{ $k | quote }}: {{ $v | quote }}
+{{- end -}}
+{{- end -}}
+
+{{- define "common.annotations.deployment" -}}
+{{- $extended := default (dict) .Values.solution -}}
+{{- $lifecycle := default (dict) .Values.lifecycle -}}
+checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63}}
+{{- $prometheus := default (dict) .Values.prometheus -}}
+{{- if $prometheus }}
+prometheus.io/scrape: "true"
+prometheus.io/path: "{{ default "/actuator/prometheus" $prometheus.path }}"
+prometheus.io/port: "{{ default "8080" $prometheus.port }}"
+{{- end -}}
+{{- end -}}
+
+{{- define "common.annotations.ingress.nginx" }}
+{{- $ingress := default (dict) .Values.ingress -}}
+kubernetes.io/ingress.class: "nginx"
+nginx.ingress.kubernetes.io/service-upstream: "{{ default "true" $ingress.service_upstream }}"
+nginx.ingress.kubernetes.io/use-regex: "{{ default "true" $ingress.use_regex }}"
+nginx.ingress.kubernetes.io/rewrite-target: "{{ default "/$2" $ingress.rewrite_target }}"
+{{- end -}}

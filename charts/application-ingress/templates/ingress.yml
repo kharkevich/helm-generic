@@ -1,0 +1,4 @@
+---
+{{- template "common.ingress" (list . "application.ingress") -}}
+{{- define "application.ingress" -}}
+{{- end -}}

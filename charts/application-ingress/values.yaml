@@ -1,0 +1,13 @@
+---
+fullnameOverride: demo
+
+
+image:
+  name: demo
+  tag: 79bc994486569b12d0
+
+config:
+  contextPath: /demo/v1
+
+prometheus:
+  enabled: true
