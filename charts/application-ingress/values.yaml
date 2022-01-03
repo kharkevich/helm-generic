@@ -1,13 +1,22 @@
 ---
-fullnameOverride: demo
+solution:
+  component: ingress
 
+servicePort: 80
 
-image:
-  name: demo
-  tag: 79bc994486569b12d0
+hosts:
+  - "cluster.example.com"
 
-config:
-  contextPath: /demo/v1
+explicitTLS:
+userRewrite: true
 
-prometheus:
-  enabled: true
+services:
+  - name: front-end
+    contextPath:
+      - /()(.*)
+  - name: back1
+    contextPath:
+      - /api/back2(/|$)(.*)
+  - name: back2
+    contextPath:
+      - /api/back2(/|$)(.*)

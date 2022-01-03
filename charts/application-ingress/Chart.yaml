@@ -10,8 +10,4 @@ maintainers:
   - email: Alexander_Kharkevich@outlook.com
     name: Kharkevich
 icon: file://icon.png
-dependencies:
-  - name: common
-    repository: file://../../library/common
-    version: 2.0.0
 appVersion: "1.0"

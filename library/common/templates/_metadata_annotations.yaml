@@ -28,11 +28,3 @@ prometheus.io/path: "{{ default "/actuator/prometheus" $prometheus.path }}"
 prometheus.io/port: "{{ default "8080" $prometheus.port }}"
 {{- end -}}
 {{- end -}}
-
-{{- define "common.annotations.ingress.nginx" }}
-{{- $ingress := default (dict) .Values.ingress -}}
-kubernetes.io/ingress.class: "nginx"
-nginx.ingress.kubernetes.io/service-upstream: "{{ default "true" $ingress.service_upstream }}"
-nginx.ingress.kubernetes.io/use-regex: "{{ default "true" $ingress.use_regex }}"
-nginx.ingress.kubernetes.io/rewrite-target: "{{ default "/$2" $ingress.rewrite_target }}"
-{{- end -}}
