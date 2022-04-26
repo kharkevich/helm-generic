@@ -38,8 +38,3 @@ jobs:
         run: |
           helm dependency update
           helm template .
-
-      # - name: Run chart-releaser
-      #   uses: helm/chart-releaser-action@v1.2.1
-      #   env:
-      #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
