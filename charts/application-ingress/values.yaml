@@ -8,15 +8,24 @@ hosts:
   - "cluster.example.com"
 
 explicitTLS:
-userRewrite: true
 
 services:
-  - name: front-end
+  - name: serviceA
+    port: 8081
+    userRewrite: true
     contextPath:
-      - /()(.*)
-  - name: back1
+      - /
+  - name: serviceB
+    annotations:
+      - nginx.ingress.kubernetes.io/proxy-body-size: 100m
     contextPath:
-      - /api/back2(/|$)(.*)
-  - name: back2
-    contextPath:
-      - /api/back2(/|$)(.*)
+      - /serviceB
+# use rewrites
+# userRewrite: true
+# services:
+#   - name: frontend
+#     contextPath:
+#       - ()(/.*)
+#   - name: api
+#     contextPath:
+#       - (/api)(/.*)

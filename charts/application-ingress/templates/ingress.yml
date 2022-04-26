@@ -3,6 +3,9 @@
 {{- range .Values.services }}
 {{- $contextPath := .contextPath }}
 {{- $serviceName := .name }}
+{{- $servicePort := .port | default 80 }}
+{{- $annotations := .annotations }}
+{{- $userRewrite := .userRewrite }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -14,8 +17,13 @@ metadata:
     nginx.ingress.kubernetes.io/service-upstream: "true"
     nginx.ingress.kubernetes.io/upstream-vhost: "{{ $serviceName }}.{{ $.Release.Namespace }}.svc.cluster.local"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    {{- if $.Values.userRewrite }}
+    {{- if (default $userRewrite false) }}
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{- end }}
+    {{- range $annotations }}
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
     {{- end }}
 spec:
   tls:
@@ -38,7 +46,7 @@ spec:
               service:
                 name: {{ $serviceName }}
                 port:
-                  number: {{ $.Values.servicePort }}
+                  number: {{ $servicePort }}
         {{- end }}
   {{- end }}
 {{- end }}
