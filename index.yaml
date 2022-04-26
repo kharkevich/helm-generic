@@ -1,0 +1,43 @@
+apiVersion: v1
+entries:
+  helm-ingress-demo:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2022-04-26T01:52:43.649756079Z"
+    description: A Helm chart for Ingress
+    digest: 7b59d5995302bdf7c11e6eff12745a459776d38db861007085eb15e574bf7435
+    home: https://github.com/kharkevich/helm-generic
+    icon: file://icon.png
+    maintainers:
+    - email: Alexander_Kharkevich@outlook.com
+      name: Kharkevich
+    name: helm-ingress-demo
+    sources:
+    - https://github.com/kharkevich/helm-generic
+    type: application
+    urls:
+    - https://github.com/kharkevich/helm-generic/releases/download/helm-ingress-demo-1.0.5/helm-ingress-demo-1.0.5.tgz
+    version: 1.0.5
+  helm-spring-demo:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2022-04-26T01:52:43.805974637Z"
+    dependencies:
+    - name: common
+      repository: file://../../library/common
+      version: 2.0.0
+    description: A Helm chart for Dummy SpringBoot service
+    digest: 5373587559e4ec85f79d8e88b31743b56bc3e2cd719764230929e26b406e960a
+    home: https://github.com/kharkevich/helm-generic
+    icon: file://icon.png
+    maintainers:
+    - email: Alexander_Kharkevich@outlook.com
+      name: Kharkevich
+    name: helm-spring-demo
+    sources:
+    - https://github.com/kharkevich/helm-generic
+    type: application
+    urls:
+    - https://github.com/kharkevich/helm-generic/releases/download/helm-spring-demo-1.0.3/helm-spring-demo-1.0.3.tgz
+    version: 1.0.3
+generated: "2022-04-26T01:52:43.805986337Z"
