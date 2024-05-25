@@ -3,6 +3,23 @@ entries:
   helm-ingress-demo:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2024-05-25T00:30:37.636903293Z"
+    description: A Helm chart for Ingress
+    digest: 17ff6241c88fef46ce3e491c8c41a0bfb3ba9cccf37206ef3e8c7c68cb008f63
+    home: https://github.com/kharkevich/helm-generic
+    icon: file://icon.png
+    maintainers:
+    - email: Alexander_Kharkevich@outlook.com
+      name: Kharkevich
+    name: helm-ingress-demo
+    sources:
+    - https://github.com/kharkevich/helm-generic
+    type: application
+    urls:
+    - https://github.com/kharkevich/helm-generic/releases/download/helm-ingress-demo-1.1.0/helm-ingress-demo-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2022-04-26T01:52:43.649756079Z"
     description: A Helm chart for Ingress
     digest: 7b59d5995302bdf7c11e6eff12745a459776d38db861007085eb15e574bf7435
@@ -40,4 +57,4 @@ entries:
     urls:
     - https://github.com/kharkevich/helm-generic/releases/download/helm-spring-demo-1.0.3/helm-spring-demo-1.0.3.tgz
     version: 1.0.3
-generated: "2022-04-26T01:52:43.805986337Z"
+generated: "2024-05-25T00:30:37.636914784Z"
