@@ -6,6 +6,18 @@
 {{- $servicePort := .port | default 80 }}
 {{- $annotations := .annotations }}
 {{- $userRewrite := .userRewrite }}
+
+{{- /* Define default annotations */}}
+{{- $defaultAnnotations := dict "kubernetes.io/ingress.class" "nginx" "nginx.ingress.kubernetes.io/service-upstream" "true" "nginx.ingress.kubernetes.io/upstream-vhost" (printf "%s.%s.svc.cluster.local" $serviceName $.Release.Namespace) "nginx.ingress.kubernetes.io/use-regex" "true" }}
+
+{{- /* Add conditional default annotations */}}
+{{- if (default $userRewrite false) }}
+{{- $_ := set $defaultAnnotations "nginx.ingress.kubernetes.io/rewrite-target" "/$2" }}
+{{- end }}
+
+{{- /* Merge annotations from values file, overriding defaults */}}
+{{- $mergedAnnotations := mergeOverwrite $defaultAnnotations $annotations }}
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -13,17 +25,8 @@ metadata:
   name: {{ $fullName}}-{{ $serviceName }}
   labels: {{ $appLabels | nindent 4 }}
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/service-upstream: "true"
-    nginx.ingress.kubernetes.io/upstream-vhost: "{{ $serviceName }}.{{ $.Release.Namespace }}.svc.cluster.local"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    {{- if (default $userRewrite false) }}
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    {{- end }}
-    {{- range $annotations }}
-    {{- range $key, $value := . }}
+    {{- range $key, $value := $mergedAnnotations }}
     {{ $key }}: {{ $value | quote }}
-    {{- end }}
     {{- end }}
 spec:
   tls:
