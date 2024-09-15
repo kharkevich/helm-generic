@@ -1,0 +1,53 @@
+{{- define "common.hpa.tpl" -}}
+{{- $hpa_config := default (dict) .Values.hpa -}}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+{{ template "common.metadata.deployment" . }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "common.fullname" . }}
+  minReplicas: {{ $hpa_config.minReplicas | default 1 $hpa_config.minReplicas }}
+  maxReplicas: {{ $hpa_config.maxReplicas | default 10 $hpa_config.maxReplicas }}
+  metrics:
+  {{- if $hpa_config.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+         type: Utilization
+         averageUtilization: {{ $hpa_config.targetCPUUtilizationPercentage }}  
+  {{- end }}
+  {{- if $hpa_config.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory  
+        target:
+          type: Utilization
+          averageUtilization: {{ $hpa_config.targetMemoryUtilizationPercentage }}
+  {{- end }}
+  {{- if empty $hpa_config.targetCPUUtilizationPercentage }}
+    {{- if empty $hpa_config.targetMemoryUtilizationPercentage }}
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 50
+          type: Utilization
+      type: Resource 
+    {{- end }}
+  {{- end }}
+{{- end -}}
+
+{{- define "common.hpa" -}}
+{{- $top := first .}}
+{{- $hpa_config := $top.Values.hpa }}
+{{- $hpa_enabled := default false $hpa_config.enabled }}
+{{- if and $hpa_config $hpa_enabled }}
+
+{{- template "common.util.merge" (append . "common.hpa.tpl") -}}
+
+{{- end }}
+{{- end -}}

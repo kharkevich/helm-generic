@@ -1,0 +1,6 @@
+{{- define "common.tolerations" }}
+{{- $tolerations := .Values.tolerations | default (list) -}}
+{{- if $tolerations }}
+tolerations:  {{- toYaml $tolerations | nindent 0 }}
+{{- end }}
+{{- end -}}

@@ -1,11 +1,17 @@
 {{- define "common.deployment.tpl" -}}
+{{- $hpaProvided := .Values.hpa | default dict }}
+{{- $hpaEnabled := $hpaProvided.enabled | default false }}
+{{- $serviceAccount := .Values.serviceAccount }}
+{{- $serviceAccountCreate := $serviceAccount.create | default false }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 {{ template "common.metadata.deployment" . }}
 spec:
+  {{- if not $hpaEnabled }}
   {{- $replicas := default "1" .Values.replicas }}
   replicas: {{ $replicas }}
+  {{- end }}
   selector:
     matchLabels: {{- include "common.labels.selector" . | nindent 6 }}
   strategy: {{- include "common.deployment.strategy.rollingUpdate" . | nindent 4 }}
@@ -14,7 +20,9 @@ spec:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
       annotations: {{- include "common.annotations.deployment" . | nindent 8 }}
     spec:
+      serviceAccountName: {{ template "common.serviceAccountName" . }}
       {{- include "common.affinity" . | nindent 6 }}
+      {{- include "common.tolerations" . | nindent 6 }}
       {{- include "common.security.context" . | nindent 6 }}
       {{- $pullSecrets := default (tuple "docker-registry") .Values.image.pullSecrets }}
       imagePullSecrets:

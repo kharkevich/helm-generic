@@ -1,6 +1,8 @@
 {{- define "common.affinity"}}
 {{- $labels := default (tuple "kubernetes.io/hostname" "failure-domain.beta.kubernetes.io/zone") .Values.antiAffinityLabels -}}
+{{- $nodeAffinity := .Values.nodeAffinity | default (dict) | toYaml -}}
 affinity:
+  nodeAffinity: {{- $nodeAffinity | nindent 4 }}
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
     {{- range $labels }}

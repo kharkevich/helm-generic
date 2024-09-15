@@ -1,6 +1,8 @@
 {{- define "common.container.tpl" -}}
+{{- $fullname := include "common.fullname" . -}}
 {{- $config := default (dict) .Values.config -}}
 {{- $lifecycle := default (dict) .Values.lifecycle -}}
+{{- $healthCheck := default (dict) .Values.healthCheck -}}
 name: app
 image: "{{ default "ghcr.io/kharkevich" .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
 imagePullPolicy: {{ default "IfNotPresent" .Values.image.pullPolicy }}
@@ -24,9 +26,16 @@ envFrom:
       name: {{ template "common.fullname" . }}
   {{ include "common.envvar.shared.configs" . | indent 2 }}
   {{ include "common.envvar.shared.secrets" . | indent 2 }}
+{{- if eq $healthCheck.kind "tcp" }}
+{{ include "common.healthcheck.liveness.tcp" . }}
+{{ include "common.healthcheck.readiness.tcp" . }}
+{{ include "common.healthcheck.startup.tcp" . }}
+{{- else if eq $healthCheck.kind "disabled" }}
+{{- else }}
 {{ include "common.healthcheck.liveness" . }}
 {{ include "common.healthcheck.readiness" . }}
 {{ include "common.healthcheck.startup" . }}
+{{- end }}
 {{ include "common.resources" . }}
 {{- end -}}
 {{- define "common.container" -}}

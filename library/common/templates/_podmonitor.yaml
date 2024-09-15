@@ -1,0 +1,19 @@
+{{- define "common.podMonitor.tpl" -}}
+{{- $monitoring := default (dict) .Values.monitoring -}}
+{{- $config := default (dict) .Values.config -}}
+{{- $config_port:= default "8080" $config.port -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+{{ template "common.metadata" . }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.selector" . | nindent 6 }}
+  podMetricsEndpoints:
+    - interval: {{ default "60s" $monitoring.interval | quote }}
+      port: {{ default $config_port $monitoring.port | quote }}
+      path: {{ default "/metrics" $monitoring.path | quote }}
+  # TODO: add namespace selector if needed
+{{- end -}}
+{{- define "common.podMonitor" -}}
+{{- template "common.util.merge" (append . "common.podMonitor.tpl") -}}
+{{- end -}}

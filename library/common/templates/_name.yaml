@@ -27,3 +27,13 @@ Usage: 'name: "{{- template "common.name" . -}}"'
   {{- $name := print $gpre $pre $base $suf $gsuf -}}
   {{- $name | lower | trunc 54 | trimSuffix "-" -}}
 {{- end -}}
+
+{{- define "common.serviceAccountName" -}}
+  {{- $serviceAccount := .Values.serviceAccount }}
+  {{- $serviceAccountCreate := $serviceAccount.create | default false }}
+  {{- if $serviceAccountCreate }}
+    {{- default (include "common.fullname" .) $serviceAccount.name }}
+  {{- else }}
+    {{- default "default" $serviceAccount.name }}
+  {{- end }}
+{{- end -}}

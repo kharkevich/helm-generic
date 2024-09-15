@@ -1,0 +1,19 @@
+{{- define "common.serviceMonitor.tpl" -}}
+{{- $monitoring := default (dict) .Values.monitoring -}}
+{{- $config := default (dict) .Values.config -}}
+{{- $config_port:= default "8080" $config.port -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+{{ template "common.metadata" . }}
+spec:
+  selector:
+    matchLabels: {{- include "common.labels.selector" . | nindent 6 }}
+  endpoints:
+    - interval: {{ default "60s" $monitoring.interval | quote }}
+      targetPort: {{ default $config_port $monitoring.port | quote }}
+      path: {{ default "/metrics" $monitoring.path | quote }}
+  # TODO: add namespace selector if needed
+{{- end -}}
+{{- define "common.serviceMonitor" -}}
+{{- template "common.util.merge" (append . "common.serviceMonitor.tpl") -}}
+{{- end -}}
