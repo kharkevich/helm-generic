@@ -22,8 +22,11 @@ lifecycle:
 {{- end }}
 {{- end }}
 envFrom:
+{{- $configmapTemplate := (print $.Template.BasePath "/configmap.yaml") -}}
+{{- if hasKey (dict $.Template.Templates) $configmapTemplate -}}
   - configMapRef:
       name: {{ template "common.fullname" . }}
+{{- end -}}
   {{ include "common.envvar.shared.configs" . | indent 2 }}
   {{ include "common.envvar.shared.secrets" . | indent 2 }}
 {{- if eq $healthCheck.kind "tcp" }}
