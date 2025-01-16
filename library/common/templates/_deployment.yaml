@@ -3,6 +3,8 @@
 {{- $hpaEnabled := $hpaProvided.enabled | default false }}
 {{- $serviceAccount := .Values.serviceAccount }}
 {{- $serviceAccountCreate := $serviceAccount.create | default false }}
+{{- $image := .Values.image | default dict -}}
+{{- $pullSecretsEnabled := $image.pullSecretsEnabled -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,10 +26,12 @@ spec:
       {{- include "common.affinity" . | nindent 6 }}
       {{- include "common.tolerations" . | nindent 6 }}
       {{- include "common.security.context" . | nindent 6 }}
-      {{- $pullSecrets := default (tuple "docker-registry") .Values.image.pullSecrets }}
+      {{- if ne $pullSecretsEnabled false }}
+      {{- $pullSecrets := default (tuple "docker-registry") $image.pullSecrets }}
       imagePullSecrets:
       {{- range $pullSecrets }}
         - name: {{ . }}
+      {{- end }}
       {{- end }}
       containers:
       -
