@@ -3,6 +3,20 @@ entries:
   common:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-01-16T15:37:49.566105325Z"
+    description: Common helm library
+    digest: 2ab298568021bce36071e3ede2d7fbee20ed2c2247be0e210ed0c2f0aa7a83a2
+    home: https://github.com/kharkevich/helm-generic
+    maintainers:
+    - email: Alexander_Kharkevich@outlook.com
+      name: Alexander Kharkevich
+    name: common
+    type: library
+    urls:
+    - https://github.com/kharkevich/helm-generic/releases/download/common-2.1.2/common-2.1.2.tgz
+    version: 2.1.2
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-01-15T05:27:16.651649432Z"
     description: Common helm library
     digest: 85bc8a7df4d4a4563ab83a37ec45586f556783f7b5911dd6920948365568c2fa
@@ -86,4 +100,4 @@ entries:
     urls:
     - https://github.com/kharkevich/helm-generic/releases/download/helm-spring-demo-1.0.3/helm-spring-demo-1.0.3.tgz
     version: 1.0.3
-generated: "2025-01-15T05:27:16.651665001Z"
+generated: "2025-01-16T15:37:49.566119542Z"
